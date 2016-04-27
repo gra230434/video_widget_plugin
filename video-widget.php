@@ -33,10 +33,11 @@ class VideoPostWidget extends WP_Widget {
 		extract( $args );
 
 		/* Our variables from the widget settings. */
-		$title         = $instance['title'];
+		/* indexs */
+		$title         = isset($instance['title']) ? $instance['title'] : '';
 		$is_youtube    = $instance['is_youtube'] ? 1 : 0;
-		$video         = $instance['videourl'];
-		$video_summary = $instance['video_summary'];
+		$video         = isset($instance['videourl']) ? $instance['videourl'] : '';
+		$video_summary = isset($instance['video_summary']) ? $instance['video_summary'] : '';
 
 		/* Before widget (defined by themes). */
 		echo $before_widget;
@@ -109,7 +110,10 @@ class VideoPostWidget extends WP_Widget {
 
     <p>
 		 <label for="<?php echo $this->get_field_id( 'video_summary' ); ?>">Video summary</label>
-		 <textarea class="widefat" id="<?php echo $this->get_field_id( 'video_summary' ); ?>" name="<?php echo $this->get_field_name( 'video_summary' ); ?>" cols="20" rows="10"><?php echo esc_textarea( $video_summary ); ?></textarea>
+		 <textarea class="widefat" cols="20" rows="10"
+		           id="<?php echo $this->get_field_id( 'video_summary' ); ?>"
+							 name="<?php echo $this->get_field_name( 'video_summary' ); ?>"><?php echo esc_textarea( $video_summary ); ?>
+		 </textarea>
 	  </p>
 
 	<?php
