@@ -33,9 +33,10 @@ class VideoPostWidget extends WP_Widget {
 		extract( $args );
 
 		/* Our variables from the widget settings. */
-		$title = $instance['title'];
-		$is_youtube = $instance['is_youtube'];
-		$video = $instance['videourl'];
+		$title         = $instance['title'];
+		$is_youtube    = $instance['is_youtube'] ? 1 : 0;
+		$video         = $instance['videourl'];
+		$video_summary = $instance['video_summary']
 
 		/* Before widget (defined by themes). */
 		echo $before_widget;
@@ -46,7 +47,7 @@ class VideoPostWidget extends WP_Widget {
 
 		/* If show announcement was selected, display the announcement. */
 		if ( $video ){
-			if ( $is_youtube == True ){
+			if ( $is_youtube == 1 ){
 				$new_videourl = substr(strrchr($video, '='), 1);
 				echo '<iframe width="300" height="169" src="https://www.youtube.com/embed/' . $new_videourl . '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>';
 			} else {
@@ -55,6 +56,10 @@ class VideoPostWidget extends WP_Widget {
 				echo '<p>Sorry.<br>Your browser does not support the video tag.<br>please try Google Chrome or Firefox</p>';
 				echo '</video>';
 			}
+		}
+
+		if ( $video_summary  ) {
+			echo '<p>'.$video_summary.'</p>';
 		}
 		/* After widget (defined by themes). */
 		echo $after_widget;
@@ -65,9 +70,10 @@ class VideoPostWidget extends WP_Widget {
 		$instance = $old_instance;
 
 		/* Strip tags for title and name to remove HTML (important for text inputs). */
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['is_youtube'] = strip_tags( $new_instance['is_youtube'] );
-		$instance['videourl'] = strip_tags( $new_instance['videourl'] );
+		$instance['title']         = strip_tags( $new_instance['title'] );
+		$instance['is_youtube']    = $new_instance['is_youtube'];
+		$instance['videourl']      = strip_tags( $new_instance['videourl'] );
+		$instance['video_summary'] = strip_tags( $new_instance['video_summary'] );
 
 		return $instance;
 	}
@@ -76,26 +82,35 @@ class VideoPostWidget extends WP_Widget {
 	function form( $instance ) {
 
 		/* Set up some default widget settings. */
-		$defaults = array( 'title' => 'video',
-		                   'is_youtube' => False,
-		                   'videourl' => '' );
+		$defaults = array( 'title'         => 'video',
+		                   'is_youtube'    => 0,
+		                   'videourl'      => '',
+											 'video_summary' => '' );
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
-		$title = $instance['title'];
-		$is_youtube = $instance['is_youtube'];
-		$videourl = $instance['videourl'];?>
+		$title         = $instance['title'];
+		$is_youtube    = $instance['is_youtube'];
+		$videourl      = $instance['videourl'];
+		$video_summary = $instance['video_summary']; ?>
 
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>">Title: </label>
-		<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $title ); ?>" style="width:100%;" />
+		<p>
+		 <label for="<?php echo $this->get_field_id( 'title' ); ?>">Title: </label>
+		 <input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $title ); ?>" style="width:100%;" />
+	 </p>
 
-		<?php if ($instance['is_youtube']): ?>
-			<input type="checkbox" name="<?php echo $this->get_field_name( 'is_youtube' ); ?>" value="yes" checked> Is youtube<br>
-		<?php else: ?>
-			<input type="checkbox" name="<?php echo $this->get_field_name( 'is_youtube' ); ?>" value="no"> Is youtube<br>
-		<?php endif; ?>
+    <p>
+		 <input id="<?php echo $this->get_field_id( 'is_youtube' ); ?>" type="checkbox" name="<?php echo $this->get_field_name( 'is_youtube' ); ?>" <?php if ( "on" == $is_youtube ) echo 'checked'; ?> >Is youtube<br>
+	  </p>
 
-		<label for="<?php echo $this->get_field_id( 'videourl' ); ?>">video url</label>
-    <input id="<?php echo $this->get_field_id( 'videourl' ); ?>" name="<?php echo $this->get_field_name( 'videourl' ); ?>" cols="20" rows="10" value="<?php echo esc_attr( $videourl ); ?>"  style="width:100%;" />
+    <p>
+		 <label for="<?php echo $this->get_field_id( 'videourl' ); ?>">Video url</label>
+     <input id="<?php echo $this->get_field_id( 'videourl' ); ?>" name="<?php echo $this->get_field_name( 'videourl' ); ?>" cols="20" value="<?php echo esc_attr( $videourl ); ?>"  style="width:100%;" />
+	 </p>
+
+    <p>
+		 <label for="<?php echo $this->get_field_id( 'video_summary' ); ?>">Video summary</label>
+		 <textarea class="widefat" id="<?php echo $this->get_field_id( 'video_summary' ); ?>" name="<?php echo $this->get_field_name( 'video_summary' ); ?>" cols="20" rows="10"><?php echo esc_textarea( $video_summary ); ?></textarea>
+	  </p>
 
 	<?php
 	}
