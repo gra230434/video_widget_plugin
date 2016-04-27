@@ -36,7 +36,7 @@ class VideoPostWidget extends WP_Widget {
 		$title         = $instance['title'];
 		$is_youtube    = $instance['is_youtube'] ? 1 : 0;
 		$video         = $instance['videourl'];
-		$video_summary = $instance['video_summary']
+		$video_summary = $instance['video_summary'];
 
 		/* Before widget (defined by themes). */
 		echo $before_widget;
@@ -58,7 +58,7 @@ class VideoPostWidget extends WP_Widget {
 			}
 		}
 
-		if ( $video_summary  ) {
+		if ( $video_summary ) {
 			echo '<p>'.$video_summary.'</p>';
 		}
 		/* After widget (defined by themes). */
