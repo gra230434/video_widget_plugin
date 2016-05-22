@@ -25,4 +25,4 @@ Version 1.2
 也希望大家給我意見，謝謝
 
 <h2>版權</h2>
-&copy; 2016 technologyofkevin.com
+GNU 2016 technologyofkevin.com
